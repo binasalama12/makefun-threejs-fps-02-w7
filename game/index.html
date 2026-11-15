@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAST TRAIN: Subway Interchange</title>
+<style>
+:root{--warn:#f5c518;--conc:#23262b;--tile:#2e7d6b;--ink:#f2efe6;--mut:#9aa39c;--rust:#c65a3a;--panel:#191c20}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#101214;color:var(--ink);font-family:system-ui,sans-serif}
+#game,#game canvas{position:fixed;inset:0;display:block}
+#hud{position:fixed;inset:0;pointer-events:none;font-family:ui-monospace,Menlo,monospace}
+#cross{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);font-size:20px;color:var(--warn)}
+#topbar{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(10,10,10,.72);padding:6px 16px;border:1px solid var(--warn);font-size:15px}
+#botbar{position:fixed;bottom:12px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-end}
+.box{background:rgba(10,10,10,.72);border:1px solid #444;padding:8px 12px;font-size:14px;line-height:1.5}
+#hp b{color:var(--warn);font-size:26px}#ammo b{font-size:30px;color:var(--ink)}
+#msg{position:fixed;top:64px;left:50%;transform:translateX(-50%);font-size:17px;color:var(--warn);text-shadow:0 1px 3px #000}
+#hit{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);color:#ff5a3c;font-size:22px;opacity:0}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:rgba(8,10,10,.78);z-index:5}
+.overlay[hidden]{display:none}
+.panel{background:var(--panel);border:2px solid var(--warn);padding:26px 30px;max-width:620px;width:92%}
+.panel h1{margin:0 0 6px;font-size:30px;letter-spacing:.04em;color:var(--warn)}
+.panel p{color:var(--mut);line-height:1.5}
+.panel button{background:var(--warn);border:0;padding:10px 18px;font-weight:700;cursor:pointer;font-size:15px}
+.shop{display:grid;gap:6px;margin:12px 0}.shop div{display:flex;justify-content:space-between;background:#22262b;padding:7px 10px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:15px}td,th{padding:6px 8px;border-bottom:1px solid #333;text-align:left}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<div id="hud">
+  <div id="cross">+</div><div id="hit">✕</div>
+  <div id="topbar"><span id="teamscore">SIGNAL 0 — 0 RUSTLINE</span> · <span id="timer">1:30</span> · ROUND <span id="round">1</span></div>
+  <div id="msg"></div>
+  <div id="botbar">
+    <div class="box" id="hp">HP <b id="hpv">100</b><br><span id="money">$800</span> · <span id="obj">Plant the charge at the train</span></div>
+    <div class="box" id="ammo"><span id="wname">P9 Sidearm</span><br><b id="mag">12</b> / <span id="res">48</span> · nade <span id="nade">0</span></div>
+  </div>
+</div>
+<div id="overlay" class="overlay">
+  <section class="panel">
+    <h1 id="ov-title">LAST TRAIN</h1>
+    <p id="ov-copy">Subway Interchange. Signal Crew vs Rustline.</p>
+    <div id="ov-extra"></div>
+    <button id="play" type="button">Enter the station</button>
+    <p>WASD move · Mouse look · Click fire · R reload · Ctrl crouch · Shift walk · F plant (hold at train) · G flash pellet · B buy · 1-4 weapons</p>
+  </section>
+</div>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.min.js" } }
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
