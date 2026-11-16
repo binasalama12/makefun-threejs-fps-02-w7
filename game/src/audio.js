@@ -32,6 +32,7 @@ export function createAudio() {
     dry() { tone(1200, 0.04, 'square', 0.05); },
     reload() { tone(500, 0.06, 'square', 0.06); setTimeout(() => tone(750, 0.06, 'square', 0.06), 160); },
     hit() { tone(900, 0.05, 'square', 0.06); },
+    headshot() { tone(1560, 0.07, 'square', 0.09); setTimeout(() => tone(2090, 0.06, 'square', 0.07), 40); noise(0.05, 0.06, 4000); },
     hurt() { tone(110, 0.15, 'sawtooth', 0.1, -40); },
     plant() { tone(660, 0.09, 'sine', 0.09); },
     beep(fast) { tone(fast ? 1320 : 880, 0.07, 'sine', 0.08); },

@@ -16,6 +16,16 @@
 #hp b{color:var(--warn);font-size:26px}#ammo b{font-size:30px;color:var(--ink)}
 #msg{position:fixed;top:64px;left:50%;transform:translateX(-50%);font-size:17px;color:var(--warn);text-shadow:0 1px 3px #000}
 #hit{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);color:#ff5a3c;font-size:22px;opacity:0}
+#feed{position:fixed;top:64px;right:16px;display:flex;flex-direction:column;gap:4px;align-items:flex-end;font-size:13px}
+#feed div{background:rgba(10,10,10,.72);border-right:3px solid var(--tile);padding:4px 9px;color:var(--ink);transition:opacity .35s}
+#feed div.head{border-right-color:#ffd23c;color:#ffd23c}
+#feed div.bad{border-right-color:var(--rust);color:#f0b9a6}
+#banner{position:fixed;top:24%;left:50%;transform:translateX(-50%);text-align:center;background:rgba(10,10,10,.82);border:2px solid var(--warn);padding:16px 44px;z-index:4}
+#banner[hidden]{display:none}
+#banner h2{margin:0;font-size:34px;letter-spacing:.06em;color:var(--warn)}
+#banner p{margin:5px 0 0;color:var(--mut);font-size:15px}
+#banner.lost{border-color:var(--rust)}#banner.lost h2{color:var(--rust)}
+#blind{position:fixed;inset:0;background:#fff8e6;opacity:0;pointer-events:none;z-index:3}
 .overlay{position:fixed;inset:0;display:grid;place-items:center;background:rgba(8,10,10,.78);z-index:5}
 .overlay[hidden]{display:none}
 .panel{background:var(--panel);border:2px solid var(--warn);padding:26px 30px;max-width:620px;width:92%}
@@ -30,6 +40,9 @@ table{width:100%;border-collapse:collapse;font-size:15px}td,th{padding:6px 8px;b
 <div id="game"></div>
 <div id="hud">
   <div id="cross">+</div><div id="hit">✕</div>
+  <div id="feed"></div>
+  <div id="banner" hidden><h2 id="banner-title"></h2><p id="banner-sub"></p></div>
+  <div id="blind"></div>
   <div id="topbar"><span id="teamscore">SIGNAL 0 — 0 RUSTLINE</span> · <span id="timer">1:30</span> · ROUND <span id="round">1</span></div>
   <div id="msg"></div>
   <div id="botbar">

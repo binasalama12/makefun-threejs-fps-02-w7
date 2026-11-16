@@ -66,11 +66,12 @@ function endRound(win, why) {
   if (G.phase === 'over' || G.phase === 'matchover') return;
   if (win) { G.us++; G.money += 2900; } else { G.them++; G.money += 1400; }
   G.money += G.kills * 0; audio.round(win);
+  hud.banner(win ? 'ROUND WON' : 'ROUND LOST', why, win ? 'won' : 'lost');
   hud.msg((win ? 'SIGNAL TAKES THE ROUND — ' : 'RUSTLINE TAKES THE ROUND — ') + why, 3200);
   G.phase = 'over'; G.overT = 3.6;
   if (G.us >= 6 || G.them >= 6 || G.round >= 9) { G.phase = 'matchover'; setTimeout(() => { if (!shot) { hud.show(G.us > G.them ? 'SIGNAL WINS THE STATION' : 'RUSTLINE HOLDS THE STATION', 'Final score from Subway Interchange.', scoreHtml(), 'Play again'); document.exitPointerLock?.(); } }, 900); }
 }
-function startMatch() { G.us = 0; G.them = 0; G.round = 1; G.money = 800; G.kills = 0; G.started = true; resetRound(); }
+function startMatch() { G.us = 0; G.them = 0; G.round = 1; G.money = 800; G.kills = 0; G.started = true; hud.clearFeed(); resetRound(); }
 
 const input = createInput(renderer.domElement, (locked) => {
   if (shot) return;
@@ -96,8 +97,16 @@ function playerShoot() {
     if (hits.length) {
       const bot = hits[0].object.userData.bot; const part = hits[0].object.userData.part;
       if (bot && bot.team === 'E') {
-        const killed = bot.damage(part === 'head' ? w.dmg * w.headMult : w.dmg, part); audio.hit(); hud.hitmark();
-        if (killed) { G.kills++; G.money += 300; hud.msg(bot.name + ' down +$300', 1200); }
+        const isHead = part === 'head';
+        const killed = bot.damage(isHead ? w.dmg * w.headMult : w.dmg, part);
+        if (isHead) audio.headshot(); else audio.hit();
+        hud.hitmark(isHead);
+        if (killed) {
+          const bonus = isHead ? 100 : 0;
+          G.kills++; G.money += 300 + bonus;
+          hud.feed('You ▸ ' + bot.name + (isHead ? ' — HEADSHOT' : ' — ' + w.name), isHead ? 'head' : '');
+          hud.msg(bot.name + ' down +$' + (300 + bonus), 1200);
+        }
       }
     }
   }
@@ -135,8 +144,8 @@ function onDetonate(type, pos) {
       let dmg = 115 * (1 - d / R) + 8;
       if (losBlocked(pos, _exp, world.colliders)) dmg *= 0.3;
       const killed = b.damage(dmg, 'body');
-      if (killed && b.team === 'E') { G.kills++; G.money += 300; hud.msg('Frag takes ' + b.name + ' +$300', 1500); }
-      else if (killed) hud.msg('Friendly fire — frag got ' + b.name + '!', 1500);
+      if (killed && b.team === 'E') { G.kills++; G.money += 300; hud.feed('You ▸ ' + b.name + ' — FRAG', ''); hud.msg('Frag takes ' + b.name + ' +$300', 1500); }
+      else if (killed) { hud.feed('Frag ▸ ' + b.name + ' — friendly fire', 'bad'); hud.msg('Friendly fire — frag got ' + b.name + '!', 1500); }
     }
     const pd = Math.hypot(player.state.pos.x - pos.x, player.state.pos.z - pos.z);
     if (pd < R && player.state.hp > 0) player.state.hp -= Math.max(4, 60 * (1 - pd / R));
@@ -220,20 +229,27 @@ function resolveBotShot(s) {
   audio.shot('carbine');
   if (!s.hit) return;
   const dmg = s.head ? 46 : 19;
-  if (s.target.isPlayer) { player.state.hp -= dmg; audio.hurt(); hud.msg('Hit by ' + s.bot.name + '!', 700); }
-  else s.target.damage(dmg, s.head ? 'head' : 'body');
+  if (s.target.isPlayer) {
+    const wasAlive = player.state.hp > 0;
+    player.state.hp -= dmg; audio.hurt(); hud.msg('Hit by ' + s.bot.name + '!', 700);
+    if (wasAlive && player.state.hp <= 0) hud.feed(s.bot.name + ' ▸ You' + (s.head ? ' — HEADSHOT' : ''), 'bad');
+  } else {
+    const killed = s.target.damage(dmg, s.head ? 'head' : 'body');
+    if (killed) hud.feed(s.bot.name + ' ▸ ' + s.target.name + (s.head ? ' — HEADSHOT' : ''), s.bot.team === 'E' ? 'bad' : '');
+  }
 }
 function syncHud() {
   const t = G.phase === 'planted' ? G.fuse : G.timer;
   hud.set(player.state.hp, G.money, arsenal.state.mag, arsenal.state.reserve, arsenal.def().name, arsenal.state.nades, G.round, Math.max(0, t), G.us, G.them,
     G.phase === 'planted' ? 'DEFEND THE CHARGE — ' + G.fuse.toFixed(0) + 's' : G.phase === 'buy' ? 'Buy phase: keys 1-6' : 'Plant the charge at the train (hold F)', arsenal.state.frags);
+  hud.blindFx(G.playerBlind || 0);
 }
 function syncCam() { camera.position.set(player.state.pos.x, player.state.pos.y + player.state.eye, player.state.pos.z); camera.rotation.set(player.state.pitch, player.state.yaw, 0, 'YXZ'); }
 
 // --- Deterministic screenshot scenes -------------------------------------------------
 function runShot(mode) {
   G.started = true; G.money = 2650; G.round = 3; G.us = 2; G.them = 1; G.kills = 2;
-  arsenal.buy(2, 99999); arsenal.equip(2); arsenal.state.nades = 1;
+  arsenal.buy(2, 99999); arsenal.equip(2); arsenal.state.nades = 1; arsenal.state.frags = 1;
   if (mode === 'start') {
     player.state.pos.set(-6, 0, 18); player.state.yaw = 0.25; player.state.pitch = -0.02;
     mates.forEach((b, i) => { b.pos.set(-11 + i * 5, 0, 13.5); b.sync(); });

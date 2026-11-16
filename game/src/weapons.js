@@ -1,12 +1,14 @@
-// Four invented guns plus a flash pellet. Price, damage, cadence and handling all differ;
-// standing still or crouching shrinks spread hard, sprinting and spraying blow it open.
+// Four invented guns plus flash and frag grenades. Price, damage, cadence and handling all
+// differ; standing still or crouching shrinks spread hard, sprinting and spraying blow it open.
+// Damage model: every gun shares one headshot rule — a head hitbox hit deals dmg × headMult
+// (×4 across the arsenal), with its own hit sound and gold hitmarker wired up in main/hud.
 import * as THREE from 'three';
 
 export const WEAPONS = [
-  { id: 'p9', name: 'P9 Sidearm', price: 300, dmg: 34, headMult: 3, mag: 12, reserve: 48, rpm: 320, auto: false, reload: 1.1, spread: 0.012, kick: 0.010, pellets: 1, range: 60 },
-  { id: 'pump', name: 'Gatekeeper Pump', price: 900, dmg: 11, headMult: 2, mag: 6, reserve: 24, rpm: 75, auto: false, reload: 2.4, spread: 0.045, kick: 0.03, pellets: 8, range: 26 },
-  { id: 'carbine', name: 'M7 Turnstile Carbine', price: 2400, dmg: 33, headMult: 3, mag: 30, reserve: 90, rpm: 640, auto: true, reload: 1.9, spread: 0.016, kick: 0.013, pellets: 1, range: 80 },
-  { id: 'rail', name: 'Third-Rail Longshot', price: 4200, dmg: 96, headMult: 2, mag: 5, reserve: 20, rpm: 48, auto: false, reload: 2.6, spread: 0.003, kick: 0.045, pellets: 1, range: 120 },
+  { id: 'p9', name: 'P9 Sidearm', price: 300, dmg: 34, headMult: 4, mag: 12, reserve: 48, rpm: 320, auto: false, reload: 1.1, spread: 0.012, kick: 0.010, pellets: 1, range: 60 },
+  { id: 'pump', name: 'Gatekeeper Pump', price: 900, dmg: 11, headMult: 4, mag: 6, reserve: 24, rpm: 75, auto: false, reload: 2.4, spread: 0.045, kick: 0.03, pellets: 8, range: 26 },
+  { id: 'carbine', name: 'M7 Turnstile Carbine', price: 2400, dmg: 33, headMult: 4, mag: 30, reserve: 90, rpm: 640, auto: true, reload: 1.9, spread: 0.016, kick: 0.013, pellets: 1, range: 80 },
+  { id: 'rail', name: 'Third-Rail Longshot', price: 4200, dmg: 96, headMult: 4, mag: 5, reserve: 20, rpm: 48, auto: false, reload: 2.6, spread: 0.003, kick: 0.045, pellets: 1, range: 120 },
 ];
 export const NADE = { name: 'Flash Pellet', price: 200 };
 export const FRAG = { name: 'Frag Grenade', price: 300 };
