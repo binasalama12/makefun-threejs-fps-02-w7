@@ -4,11 +4,12 @@ export function createHud() {
   const ov = el('overlay');
   let hitTimer = null;
   return {
-    set(hp, money, mag, res, wname, nades, round, tsec, us, them, obj) {
+    set(hp, money, mag, res, wname, nades, round, tsec, us, them, obj, frags) {
       el('hpv').textContent = Math.max(0, Math.ceil(hp));
       el('money').textContent = '$' + money;
       el('mag').textContent = mag; el('res').textContent = res;
       el('wname').textContent = wname; el('nade').textContent = nades;
+      const fr = el('frag'); if (fr) fr.textContent = frags || 0;
       el('round').textContent = round;
       el('timer').textContent = Math.floor(tsec / 60) + ':' + String(Math.floor(tsec % 60)).padStart(2, '0');
       el('teamscore').textContent = 'SIGNAL ' + us + ' — ' + them + ' RUSTLINE';

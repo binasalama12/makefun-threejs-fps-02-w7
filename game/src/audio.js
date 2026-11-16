@@ -37,6 +37,7 @@ export function createAudio() {
     beep(fast) { tone(fast ? 1320 : 880, 0.07, 'sine', 0.08); },
     boom() { noise(0.9, 0.4, 300); tone(55, 0.8, 'sine', 0.3, -20); },
     flash() { tone(2400, 0.25, 'sine', 0.1, -1600); noise(0.15, 0.08, 5000); },
+    toss() { noise(0.12, 0.07, 1200); tone(320, 0.1, 'sine', 0.05, 180); },
     buy() { tone(1040, 0.07, 'sine', 0.07); setTimeout(() => tone(1560, 0.09, 'sine', 0.07), 80); },
     round(win) { tone(win ? 523 : 262, 0.16, 'triangle', 0.1); setTimeout(() => tone(win ? 784 : 196, 0.24, 'triangle', 0.1), 150); },
   };

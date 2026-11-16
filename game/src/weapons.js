@@ -9,10 +9,11 @@ export const WEAPONS = [
   { id: 'rail', name: 'Third-Rail Longshot', price: 4200, dmg: 96, headMult: 2, mag: 5, reserve: 20, rpm: 48, auto: false, reload: 2.6, spread: 0.003, kick: 0.045, pellets: 1, range: 120 },
 ];
 export const NADE = { name: 'Flash Pellet', price: 200 };
+export const FRAG = { name: 'Frag Grenade', price: 300 };
 
 export function createArsenal(camera) {
   const owned = [true, false, false, false];
-  const state = { idx: 0, mag: WEAPONS[0].mag, reserve: WEAPONS[0].reserve, nades: 0, cooldown: 0, reloading: 0, bloom: 0 };
+  const state = { idx: 0, mag: WEAPONS[0].mag, reserve: WEAPONS[0].reserve, nades: 0, frags: 0, cooldown: 0, reloading: 0, bloom: 0 };
   const store = WEAPONS.map((w) => ({ mag: w.mag, reserve: w.reserve }));
   const group = new THREE.Group(); camera.add(group); group.position.set(0.28, -0.26, -0.55);
   const bodyMat = new THREE.MeshStandardMaterial({ color: 0x2b2e33, roughness: 0.4, metalness: 0.6 });
